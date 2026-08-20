@@ -171,7 +171,11 @@ recordingsList.addEventListener('click', async (e) => {
     link.click();
     document.body.removeChild(link);
 
-    URL.revokeObjectURL(blobUrl);
+    // iOS Safari系ブラウザはダウンロード処理が少し遅れて進むため、
+    // すぐに解放せず少し待ってからにする
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+    }, 3000);
   } catch (err) {
     console.error('download error:', err);
     alert('ダウンロードに失敗しました');
