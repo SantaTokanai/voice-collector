@@ -1,0 +1,117 @@
+/* admin.html専用。style.cssの変数・カードデザインをそのまま利用します */
+
+#login-section input {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 10px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid #dcefec;
+  background: #fafffe;
+  outline: none;
+}
+
+#login-section input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 179, 168, 0.15);
+}
+
+.admin-toolbar {
+  max-width: 480px;
+  margin: 0 auto 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.summary-text {
+  font-family: var(--font-display);
+  font-size: 0.9em;
+  color: #2d3a3a;
+}
+
+.admin-toolbar-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-secondary-sm {
+  padding: 8px 14px;
+  border-radius: 14px;
+  border: 1px solid #dcefec;
+  background: #fff;
+  color: var(--accent-dark);
+  font-family: var(--font-body);
+  font-size: 0.82em;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#recordings-list {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.recording-row {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 16px rgba(79, 179, 168, 0.08);
+  text-align: left;
+}
+
+.recording-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.recording-nickname {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1em;
+  color: #2d3a3a;
+}
+
+.recording-date {
+  font-family: var(--font-body);
+  font-size: 0.78em;
+  color: #888;
+  white-space: nowrap;
+}
+
+.recording-row audio {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.recording-download {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.82em;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  padding: 6px 14px;
+  border-radius: 14px;
+  text-decoration: none;
+}
+
+.recording-loading,
+.recording-empty {
+  font-family: var(--font-body);
+  font-size: 0.85em;
+  color: #888;
+  text-align: center;
+  padding: 20px;
+}
