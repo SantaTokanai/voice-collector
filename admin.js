@@ -162,8 +162,22 @@ recordingsList.addEventListener('click', async (e) => {
   try {
     const response = await fetch(url);
     const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
+    const file = new File([blob], filename, { type: blob.type });
 
+    // iPhone等、ファイル共有に対応した環境では「共有」画面を使う
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: filename });
+        return;
+      } catch (shareErr) {
+        if (shareErr.name === 'AbortError') return; // キャンセルは何もしない
+        console.error('share error:', shareErr);
+        // 共有に失敗した場合は、下の通常ダウンロード方式へフォールバック
+      }
+    }
+
+    // パソコン等、共有APIが無い環境は、従来通り直接ダウンロードさせる
+    const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = blobUrl;
     link.download = filename;
