@@ -48,6 +48,7 @@ let recordedBlob = null;
 let recordStartTime = 0;
 let timerRafId = null;
 let currentUser = null;
+let currentPlaybackUrl = null;
 
 function setStatus(text, type = 'error') {
   statusMsg.textContent = text;
@@ -177,18 +178,13 @@ function handleRecordingStopped() {
   const mimeType = mediaRecorder.mimeType || 'audio/webm';
   recordedBlob = new Blob(recordedChunks, { type: mimeType });
 
-  // iOS Safariではblob URLの直接再生が不安定なことがあるため、
-  // より互換性の高いdata URL形式に変換してから再生用に割り当てる
-  const reader = new FileReader();
-  reader.onload = () => {
-    playbackAudio.src = reader.result;
-    playbackAudio.load();
-  };
-  reader.onerror = () => {
-    console.error('FileReader error:', reader.error);
-    setStatus('録音データの読み込みに失敗しました。撮り直してください');
-  };
-  reader.readAsDataURL(recordedBlob);
+  // 前回分のURLが残っていればメモリ解放してから、新しい再生用URLを作る
+  if (currentPlaybackUrl) {
+    URL.revokeObjectURL(currentPlaybackUrl);
+  }
+  currentPlaybackUrl = URL.createObjectURL(recordedBlob);
+  playbackAudio.src = currentPlaybackUrl;
+  playbackAudio.load();
 
   recorderSection.style.display = 'none';
   playbackSection.style.display = 'block';
