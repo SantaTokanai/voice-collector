@@ -36,6 +36,10 @@ const rerecordBtn = document.getElementById('rerecord-btn');
 const submitBtn = document.getElementById('submit-btn');
 const recordAgainBtn = document.getElementById('record-again-btn');
 
+playbackAudio.addEventListener('error', () => {
+  console.error('playback error:', playbackAudio.error);
+});
+
 // --- 状態管理 ---
 let mediaRecorder = null;
 let mediaStream = null;
@@ -173,8 +177,18 @@ function handleRecordingStopped() {
   const mimeType = mediaRecorder.mimeType || 'audio/webm';
   recordedBlob = new Blob(recordedChunks, { type: mimeType });
 
-  const url = URL.createObjectURL(recordedBlob);
-  playbackAudio.src = url;
+  // iOS Safariではblob URLの直接再生が不安定なことがあるため、
+  // より互換性の高いdata URL形式に変換してから再生用に割り当てる
+  const reader = new FileReader();
+  reader.onload = () => {
+    playbackAudio.src = reader.result;
+    playbackAudio.load();
+  };
+  reader.onerror = () => {
+    console.error('FileReader error:', reader.error);
+    setStatus('録音データの読み込みに失敗しました。撮り直してください');
+  };
+  reader.readAsDataURL(recordedBlob);
 
   recorderSection.style.display = 'none';
   playbackSection.style.display = 'block';
