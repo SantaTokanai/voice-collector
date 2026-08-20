@@ -130,7 +130,7 @@ async function loadRecordings() {
           </div>
           ${downloadUrl
             ? `<audio controls src="${escapeHtml(downloadUrl)}"></audio>
-               <a class="recording-download" href="${escapeHtml(downloadUrl)}" download="${escapeHtml(data.nickname || 'recording')}.${ext}">⬇️ ダウンロード</a>`
+               <button type="button" class="recording-download" data-url="${escapeHtml(downloadUrl)}" data-filename="${escapeHtml(data.nickname || 'recording')}.${ext}">⬇️ ダウンロード</button>`
             : `<div class="recording-loading">音声の取得に失敗しました</div>`
           }
         </div>
@@ -146,3 +146,37 @@ async function loadRecordings() {
 }
 
 refreshBtn.addEventListener('click', loadRecordings);
+
+// ダウンロードボタン：一度データを取得してから、確実にダウンロードとして保存させる
+recordingsList.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.recording-download');
+  if (!btn) return;
+
+  const url = btn.dataset.url;
+  const filename = btn.dataset.filename;
+  const originalText = btn.textContent;
+
+  btn.disabled = true;
+  btn.textContent = '準備中...';
+
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(blobUrl);
+  } catch (err) {
+    console.error('download error:', err);
+    alert('ダウンロードに失敗しました');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+});
