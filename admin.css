@@ -103,8 +103,14 @@
   color: #fff;
   background: linear-gradient(180deg, var(--accent), var(--accent-dark));
   padding: 6px 14px;
+  border: none;
   border-radius: 14px;
-  text-decoration: none;
+  cursor: pointer;
+}
+
+.recording-download:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .recording-loading,
