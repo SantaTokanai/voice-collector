@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://firestore.googleapis.com https://*.firebaseio.com https://firebasestorage.googleapis.com;">
+
+<title>音声収集</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <h1 class="page-title">かんたん音声収集</h1>
+  <p class="page-note">お名前(ニックネーム)を入力して、ボタンを押して録音してください。最大10秒です。</p>
+
+  <div class="card">
+
+    <!-- ニックネーム入力 -->
+    <div id="nickname-section">
+      <input type="text" id="nickname-input" placeholder="ニックネームを入力" maxlength="30">
+    </div>
+
+    <!-- 録音エリア -->
+    <div id="recorder-section">
+      <div id="timer-display" class="timer-display">0.0 / 10.0 秒</div>
+
+      <div id="progress-track" class="progress-track">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+
+      <button id="record-btn" class="record-btn" disabled>
+        <span id="record-btn-label">🎙️ 録音を始める</span>
+      </button>
+
+      <div id="status-msg" class="status-msg"></div>
+    </div>
+
+    <!-- 再生・確認エリア（録音後に表示） -->
+    <div id="playback-section" style="display:none;">
+      <p class="playback-label">録音した内容を確認してください</p>
+      <audio id="playback-audio" controls></audio>
+
+      <div class="action-buttons">
+        <button id="rerecord-btn" class="btn-secondary">🔁 撮り直す</button>
+        <button id="submit-btn" class="btn-primary">✅ この内容を送信</button>
+      </div>
+    </div>
+
+    <!-- 送信完了エリア -->
+    <div id="done-section" style="display:none;">
+      <div class="done-icon">🎉</div>
+      <p class="done-message">送信が完了しました！<br>ご協力ありがとうございました。</p>
+      <button id="record-again-btn" class="btn-secondary">別の音声をもう一度録音する</button>
+    </div>
+
+  </div>
+
+  <script type="module" src="recorder.js"></script>
+</body>
+</html>
